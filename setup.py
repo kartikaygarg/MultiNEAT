@@ -42,10 +42,10 @@ def getExtensions():
              '-Wall'
              ]
 
-    if 'win' in platform:
-        extra.append('/EHsc')
-    else:
-        extra.append('-w')
+    #if 'win' in platform:
+    #    extra.append('/EHsc')
+    #else:
+    #    extra.append('-w')
 
     build_sys = os.getenv('MN_BUILD')
 

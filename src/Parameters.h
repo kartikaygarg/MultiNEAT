@@ -30,6 +30,8 @@
 // Description: Definition for the parameters class.
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <fstream>
+
 #ifdef USE_BOOST_PYTHON
 
 #include <boost/python.hpp>
