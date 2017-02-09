@@ -37,7 +37,7 @@ double abs(double x)
     return x;
 }*/
 
-int num_class_labels = 8;      // labels for 0-4 and MISC
+int num_class_labels = 7;      // labels for 0-4 and MISC
 int num_tests = 10;   //No of training data tests
 int num_gens = 1000;   //No of training data tests
 
@@ -316,7 +316,12 @@ void print_to_file(fstream& file, double** outputs, int gen){
     for(int i=0; i < num_tests ; ++i){      //Actual digit tested
         file<<"\nLabel "<<i<<" | ";
         for(int j=0; j < num_class_labels ; ++j){   //Value of output labels
-            file<<outputs[i][j]<<" | ";
+            if(outputs[i][j] < 0.1)
+                file<<0<<" | ";
+            else if(outputs[i][j] > 0.9)
+                file<<1<<" | ";
+            else
+                file<<outputs[i][j]<<" | ";
         }
     }
     file<<"\n-------------------------------------------------\n";
