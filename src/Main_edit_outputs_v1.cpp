@@ -37,21 +37,19 @@ double abs(double x)
     return x;
 }*/
 
-int num_class_labels = 8;      // labels for 0-4 and MISC
-int num_tests = 10;   //No of training data tests
-int num_gens = 1000;   //No of training data tests
-
 //std::vector<double>
-double xortest(Genome& g, double** outputs)
+std::array<std::vector<double>,10> xortest(Genome& g, double& fitness)
 {
 
     NeuralNetwork net;
     g.BuildPhenotype(net);
     
+    int output_labels = 4;      // labels for 0-4 and MISC
     int depth = 30;
     double error = 0;
     double class_error = 0, miss_error = 0;
     std::vector<double> inputs;
+    std::array<std::vector<double>,10> ret_out;
     inputs.resize(8);
 
     net.Flush();    //0
@@ -65,18 +63,12 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[0][i] = net.Output()[i];
-        if(outputs[0][i] < 1e-3){
-            outputs[0][i] = 0;
-        }
-        else if(outputs[0][i] > 0.135e2){
-            outputs[0][i] = 1;
-        }
+    ret_out[0] = net.Output();
+    for(int i=0; i<output_labels; ++i) {
         if(i == 0)
-            class_error += fabs(outputs[0][i] - 1.0);
+            class_error += fabs(ret_out[0][i] - 1.0);
         else
-            miss_error += fabs(outputs[0][i] - 0.0);
+            miss_error += fabs(ret_out[0][i] - 0.0);
     }
 
     net.Flush();    //1
@@ -90,18 +82,11 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[1][i] = net.Output()[i];
-        if(outputs[1][i] < 1e-3){
-            outputs[1][i] = 0;
-        }
-        else if(outputs[1][i] > 0.135e2){
-            outputs[1][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 1)
-            class_error += fabs(outputs[1][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[1][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
 
     net.Flush();    //2
@@ -115,18 +100,11 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[2][i] = net.Output()[i];
-        if(outputs[2][i] < 1e-3){
-            outputs[2][i] = 0;
-        }
-        else if(outputs[2][i] > 0.135e2){
-            outputs[2][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 2)
-            class_error += fabs(outputs[2][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[2][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
 
     net.Flush();    //3
@@ -140,18 +118,11 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[3][i] = net.Output()[i];
-        if(outputs[3][i] < 1e-3){
-            outputs[3][i] = 0;
-        }
-        else if(outputs[3][i] > 0.135e2){
-            outputs[3][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 3)
-            class_error += fabs(outputs[3][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[3][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
     
     net.Flush();    //4
@@ -165,18 +136,11 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[4][i] = net.Output()[i];
-        if(outputs[4][i] < 1e-3){
-            outputs[4][i] = 0;
-        }
-        else if(outputs[4][i] > 0.135e2){
-            outputs[4][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 4)
-            class_error += fabs(outputs[4][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[4][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
     
     net.Flush();    //5
@@ -190,18 +154,11 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[5][i] = net.Output()[i];
-        if(outputs[5][i] < 1e-3){
-            outputs[5][i] = 0;
-        }
-        else if(outputs[5][i] > 0.135e2){
-            outputs[5][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 5)
-            class_error += fabs(outputs[5][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[5][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
     
     net.Flush();    //6
@@ -215,18 +172,11 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[6][i] = net.Output()[i];
-        if(outputs[6][i] < 1e-3){
-            outputs[6][i] = 0;
-        }
-        else if(outputs[6][i] > 0.135e2){
-            outputs[6][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 6)
-            class_error += fabs(outputs[6][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[6][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
     
     net.Flush();    //7
@@ -240,18 +190,11 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[7][i] = net.Output()[i];
-        if(outputs[7][i] < 1e-3){
-            outputs[7][i] = 0;
-        }
-        else if(outputs[7][i] > 0.135e2){
-            outputs[7][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 7)
-            class_error += fabs(outputs[7][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[7][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
     
     net.Flush();    //8
@@ -265,18 +208,11 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[8][i] = net.Output()[i];
-        if(outputs[8][i] < 1e-3){
-            outputs[8][i] = 0;
-        }
-        else if(outputs[8][i] > 0.135e2){
-            outputs[8][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 8)
-            class_error += fabs(outputs[8][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[8][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
     
     net.Flush();    //9
@@ -290,44 +226,20 @@ double xortest(Genome& g, double** outputs)
     inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    for(int i=0; i<num_class_labels; ++i) {
-        outputs[9][i] = net.Output()[i];
-        if(outputs[9][i] < 1e-3){
-            outputs[9][i] = 0;
-        }
-        else if(outputs[9][i] > 0.135e2){
-            outputs[9][i] = 1;
-        }
+    for(int i=0; i<output_labels; ++i) {
         if(i == 9)
-            class_error += fabs(outputs[9][i] - 1.0);
+            class_error += fabs(net.Output()[i] - 1.0);
         else
-            miss_error += fabs(outputs[9][i] - 0.0);
+            miss_error += fabs(net.Output()[i] - 0.0);
     }
 
-    return ((1.0 - class_error )/(1.0 + miss_error))*100.0;
+    // return ((1.0 - class_error )/(1.0 + miss_error))*100.0;
+    fitness = ((1.0 - class_error )/(1.0 + miss_error))*100.0;
 
-}
-
-void print_to_file(fstream& file, double** outputs, int gen){
-    file<<"\n Better fitness at gen: "<<gen<<" with Genome: <Print Genome func> \n";
-    file<<"-------------------------------------------------\n";
-    file<<"Lab\\Out | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n";
-    file<<"--------|---|---|---|---|---|---|---|---|---|---|";
-    for(int i=0; i < num_tests ; ++i){      //Actual digit tested
-        file<<"\nLabel "<<i<<" | ";
-        for(int j=0; j < num_class_labels ; ++j){   //Value of output labels
-            file<<outputs[i][j]<<" | ";
-        }
-    }
-    file<<"\n-------------------------------------------------\n";
 }
 
 int main()
 {
-    char OutputFileName[] = "output.log";
-    fstream Output_file;
-    Output_file.open(OutputFileName, ios::out);
-    
     Parameters params;
 
     params.PopulationSize = 150;
@@ -367,26 +279,19 @@ int main()
     params.CrossoverRate = 0.75 ;
     params.MultipointCrossoverRate = 0.4;
     params.SurvivalRate = 0.2;
-    
-    // int num_class_labels = 4;     //No of output labels
+
 
     Genome s(0, 8,      //No of input sensor neurons
              0,
-             num_class_labels,         //No of output labels
+             4,         //No of output labels
              false,
              UNSIGNED_SIGMOID,
              UNSIGNED_SIGMOID,
              0,
              params);
     Population pop(s, params, true, 1.0, time(0));
-    
-    double** outputs = NULL;
-    outputs = (double**) malloc(num_tests*sizeof(double*));
-    for(int i=0; i<num_tests ; ++i){
-        outputs[i] = (double*) calloc(num_class_labels,sizeof(double));
-    }
-    
-    for(int k=0; k<num_gens; k++)
+
+    for(int k=0; k<1000; k++)
     //for(int k=0; k<1500; k++)
     {
         double bestf = -999999;
@@ -394,30 +299,23 @@ int main()
         {
             for(unsigned int j=0; j < pop.m_Species[i].m_Individuals.size(); j++)
             {
-                double f = xortest(pop.m_Species[i].m_Individuals[j], outputs);
+                double f = 0;
+                std::array<std::vector<double>,10> ret_out = xortest(pop.m_Species[i].m_Individuals[j], &f);
+                // double f = xortest(pop.m_Species[i].m_Individuals[j]);
                 pop.m_Species[i].m_Individuals[j].SetFitness(f);
                 pop.m_Species[i].m_Individuals[j].SetEvaluated();
 
                 if (f > bestf)
                 {
                     bestf = f;
-                    print_to_file(Output_file, outputs, k);
                 }
             }
         }
 
         printf("Generation: %d, best fitness: %3.5f\n", k, bestf);
         pop.Epoch();
-        
-        if(bestf > 99.0){
-            cout<<"\n-------------------------------------------------\n";
-            cout<<"\nConvergence ACHIEVED!!!";
-            break;
-        }
     }
 
-    Output_file.close();
-    
     return 0;
 }
 
