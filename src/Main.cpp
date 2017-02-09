@@ -10,6 +10,8 @@
   *
   */
 
+#define _GNU_SOURCE
+
 #include "Genome.h"
 #include "Population.h"
 #include "NeuralNetwork.h"
@@ -41,45 +43,195 @@ double xortest(Genome& g)
 
     NeuralNetwork net;
     g.BuildPhenotype(net);
-
-    int depth = 5;
+    
+    int output_labels = 10;      // labels for 0-4 and MISC
+    int depth = 30;
     double error = 0;
+    double class_error = 0, miss_error = 0;
     std::vector<double> inputs;
-    inputs.resize(3);
+    inputs.resize(8);
 
-    net.Flush();
-    inputs[0] = 1;
-    inputs[1] = 0;
-    inputs[2] = 1;
-    net.Input(inputs);
-    for(int i=0; i<depth; i++) { net.Activate(); }
-    error += fabs(net.Output()[0] - 1.0);
-
-    net.Flush();
-    inputs[0] = 0;
+    net.Flush();    //0
+    inputs[0] = 1;  // Segment - a
     inputs[1] = 1;
     inputs[2] = 1;
+    inputs[3] = 1;
+    inputs[4] = 1;
+    inputs[5] = 1;
+    inputs[6] = 0;  // Segment - g
+    inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    error += fabs(net.Output()[0] - 1.0);
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 0)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
 
-    net.Flush();
-    inputs[0] = 0;
-    inputs[1] = 0;
-    inputs[2] = 1;
-    net.Input(inputs);
-    for(int i=0; i<depth; i++) { net.Activate(); }
-    error += fabs(net.Output()[0] - 0.0);
-
-    net.Flush();
-    inputs[0] = 1;
+    net.Flush();    //1
+    inputs[0] = 0;  // Segment - a
     inputs[1] = 1;
     inputs[2] = 1;
+    inputs[3] = 0;
+    inputs[4] = 0;
+    inputs[5] = 0;
+    inputs[6] = 0;  // Segment - g
+    inputs[7] = 1;  //BIAS
     net.Input(inputs);
     for(int i=0; i<depth; i++) { net.Activate(); }
-    error += fabs(net.Output()[0] - 0.0);
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 1)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
 
-    return (4.0 - error)*(4.0 - error);
+    net.Flush();    //2
+    inputs[0] = 1;  // Segment - a
+    inputs[1] = 1;
+    inputs[2] = 0;
+    inputs[3] = 1;
+    inputs[4] = 1;
+    inputs[5] = 0;
+    inputs[6] = 1;  // Segment - g
+    inputs[7] = 1;  //BIAS
+    net.Input(inputs);
+    for(int i=0; i<depth; i++) { net.Activate(); }
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 2)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
+
+    net.Flush();    //3
+    inputs[0] = 1;  // Segment - a
+    inputs[1] = 1;
+    inputs[2] = 1;
+    inputs[3] = 1;
+    inputs[4] = 0;
+    inputs[5] = 0;
+    inputs[6] = 0;  // Segment - g
+    inputs[7] = 1;  //BIAS
+    net.Input(inputs);
+    for(int i=0; i<depth; i++) { net.Activate(); }
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 3)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
+    
+    net.Flush();    //4
+    inputs[0] = 0;  // Segment - a
+    inputs[1] = 1;
+    inputs[2] = 1;
+    inputs[3] = 0;
+    inputs[4] = 0;
+    inputs[5] = 1;
+    inputs[6] = 1;  // Segment - g
+    inputs[7] = 1;  //BIAS
+    net.Input(inputs);
+    for(int i=0; i<depth; i++) { net.Activate(); }
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 4)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
+    
+    net.Flush();    //5
+    inputs[0] = 1;  // Segment - a
+    inputs[1] = 0;
+    inputs[2] = 1;
+    inputs[3] = 1;
+    inputs[4] = 0;
+    inputs[5] = 1;
+    inputs[6] = 1;  // Segment - g
+    inputs[7] = 1;  //BIAS
+    net.Input(inputs);
+    for(int i=0; i<depth; i++) { net.Activate(); }
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 5)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
+    
+    net.Flush();    //6
+    inputs[0] = 1;  // Segment - a
+    inputs[1] = 0;
+    inputs[2] = 1;
+    inputs[3] = 1;
+    inputs[4] = 1;
+    inputs[5] = 1;
+    inputs[6] = 1;  // Segment - g
+    inputs[7] = 1;  //BIAS
+    net.Input(inputs);
+    for(int i=0; i<depth; i++) { net.Activate(); }
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 6)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
+    
+    net.Flush();    //7
+    inputs[0] = 1;  // Segment - a
+    inputs[1] = 1;
+    inputs[2] = 1;
+    inputs[3] = 0;
+    inputs[4] = 0;
+    inputs[5] = 0;
+    inputs[6] = 0;  // Segment - g
+    inputs[7] = 1;  //BIAS
+    net.Input(inputs);
+    for(int i=0; i<depth; i++) { net.Activate(); }
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 7)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
+    
+    net.Flush();    //8
+    inputs[0] = 1;  // Segment - a
+    inputs[1] = 1;
+    inputs[2] = 1;
+    inputs[3] = 1;
+    inputs[4] = 1;
+    inputs[5] = 1;
+    inputs[6] = 1;  // Segment - g
+    inputs[7] = 1;  //BIAS
+    net.Input(inputs);
+    for(int i=0; i<depth; i++) { net.Activate(); }
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 8)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
+    
+    net.Flush();    //9
+    inputs[0] = 1;  // Segment - a
+    inputs[1] = 1;
+    inputs[2] = 1;
+    inputs[3] = 0;
+    inputs[4] = 0;
+    inputs[5] = 1;
+    inputs[6] = 1;  // Segment - g
+    inputs[7] = 1;  //BIAS
+    net.Input(inputs);
+    for(int i=0; i<depth; i++) { net.Activate(); }
+    for(int i=0; i<output_labels; ++i) {
+        if(i == 9)
+            class_error += fabs(net.Output()[i] - 1.0);
+        else
+            miss_error += fabs(net.Output()[i] - 0.0);
+    }
+
+    return ((1.0 - class_error )/(1.0 + miss_error))*100.0;
 
 }
 
@@ -126,9 +278,9 @@ int main()
     params.SurvivalRate = 0.2;
 
 
-    Genome s(0, 3,
+    Genome s(0, 8,      //No of input sensor neurons
              0,
-             1,
+             10,         //No of output labels
              false,
              UNSIGNED_SIGMOID,
              UNSIGNED_SIGMOID,
@@ -136,7 +288,8 @@ int main()
              params);
     Population pop(s, params, true, 1.0, time(0));
 
-    for(int k=0; k<5000; k++)
+    for(int k=0; k<1500; k++)
+    //for(int k=0; k<1500; k++)
     {
         double bestf = -999999;
         for(unsigned int i=0; i < pop.m_Species.size(); i++)

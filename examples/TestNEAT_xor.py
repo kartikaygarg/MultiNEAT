@@ -13,7 +13,7 @@ import MultiNEAT as NEAT
 from MultiNEAT import EvaluateGenomeList_Serial
 from MultiNEAT import GetGenomeList, ZipFitness
 
-from concurrent.futures import ProcessPoolExecutor, as_completed
+#from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
 def evaluate(genome):
